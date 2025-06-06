@@ -1,0 +1,119 @@
+ :root {
+            --bg-primary: #000000;
+            --bg-secondary: #16181c;
+            --bg-hover: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: #8b98a5;
+            --border-color: #2f3336;
+            --accent-color: #1da1f2;
+            --accent-hover: #1a91da;
+            --bg-hover: rgba(255, 255, 255, 0.05);
+            --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+            --scrollbar-track: transparent;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7f9fa;
+            --bg-hover: rgba(0, 0, 0, 0.03);
+            --text-primary: #0f1419;
+            --text-secondary: #536471;
+            --border-color: #eff3f4;
+            --accent-color: #1da1f2;
+            --accent-hover: #1a91da;
+            --bg-hover: rgba(0, 0, 0, 0.03);
+            --scrollbar-thumb: rgba(0, 0, 0, 0.2);
+            --scrollbar-track: transparent;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+         /* For Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .theme-transition {
+            transition: all 0.3s ease;
+        }
+
+        .hover-grow:hover {
+            transform: scale(1.02);
+        }
+        
+        .tweet-hover:hover {
+            background-color: var(--bg-hover);
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+
+        .sidebar-compact {
+            padding: 0.75rem;
+        }
+
+        .sidebar-compact .nav-item {
+            padding: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .trending-item:hover {
+            background-color: var(--bg-hover);
+            cursor: pointer;
+        }
+
+        .btn-theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .btn-theme-toggle:hover {
+            background: var(--bg-hover);
+        }
+
+        .hover-item:hover {
+        background-color: var(--bg-hover);
+        }
+        .right-sidebar {
+        /* Changed class name for clarity */
+        scrollbar-gutter: stable;
+        mask-image: linear-gradient(to top, transparent, black 10px);
+    }
+  
+    

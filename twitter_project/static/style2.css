@@ -1,0 +1,477 @@
+.bg-twitter-blue {
+    background-color: #1DA1F2;
+}
+.text-twitter-blue {
+    color: #1DA1F2;
+}
+
+/* Navigation Styles */
+.nav-link, .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 24px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: #0F1419;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark .nav-link, .dark .mobile-nav-link {
+    color: #FFFFFF;
+}
+
+.nav-link:hover, .mobile-nav-link:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+    transform: translateX(2px);
+}
+
+.nav-link.active, .mobile-nav-link.active {
+    font-weight: 700;
+    color: #1DA1F2;
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+.nav-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover .nav-icon,
+.mobile-nav-link:hover .nav-icon {
+    transform: scale(1.1);
+}
+
+.nav-text {
+    font-size: 1.25rem;
+    font-weight: inherit;
+}
+
+/* Notification badges */
+.notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #1DA1F2;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Theme toggle button */
+.theme-toggle-btn {
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background-color: rgba(29, 161, 242, 0.1);
+    color: #1DA1F2;
+}
+
+.theme-toggle-btn:hover {
+    background-color: rgba(29, 161, 242, 0.2);
+    transform: rotate(180deg) scale(1.1);
+}
+
+/* Auth buttons */
+.auth-btn-primary {
+    width: 100%;
+    background-color: #1DA1F2;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-weight: bold;
+    border: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.auth-btn-primary:hover {
+    background-color: #1991DB;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(29, 161, 242, 0.3);
+}
+
+.auth-btn-secondary {
+    width: 100%;
+    background-color: transparent;
+    color: #1DA1F2;
+    border: 1px solid #1DA1F2;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.auth-btn-secondary:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(29, 161, 242, 0.2);
+}
+
+.dark .auth-btn-secondary {
+    color: #1DA1F2;
+    border-color: #1DA1F2;
+}
+
+.dark .auth-btn-secondary:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+/* Search input */
+.search-input {
+    width: 100%;
+    background-color: #F1F3F4;
+    border: none;
+    border-radius: 24px;
+    padding: 12px 16px 12px 48px;
+    outline: none;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.dark .search-input {
+    background-color: #2F3336;
+    color: white;
+}
+
+.search-input:focus {
+    background-color: white;
+    box-shadow: 0 0 0 2px #1DA1F2;
+}
+
+.dark .search-input:focus {
+    background-color: #15202B;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: #657786;
+}
+
+/* Sidebar cards */
+.sidebar-card {
+    background-color: #F7F9FA;
+    border-radius: 16px;
+    padding: 16px;
+    transition: all 0.2s ease;
+}
+
+.dark .sidebar-card {
+    background-color: #192734;
+}
+
+.sidebar-card:hover {
+    background-color: #F1F3F4;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .sidebar-card:hover {
+    background-color: #1E2732;
+}
+
+.sidebar-card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #0F1419;
+}
+
+.dark .sidebar-card-title {
+    color: #FFFFFF;
+}
+
+/* Trending items */
+.trending-item {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.trending-item:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+.trending-category {
+    font-size: 12px;
+    color: #657786;
+    margin-bottom: 2px;
+}
+
+.trending-topic {
+    font-weight: bold;
+    font-size: 14px;
+    color: #0F1419;
+    margin-bottom: 2px;
+}
+
+.dark .trending-topic {
+    color: #FFFFFF;
+}
+
+.trending-count {
+    font-size: 12px;
+    color: #657786;
+}
+
+/* Follow items */
+.follow-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.follow-item:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+.follow-btn {
+    background-color: #0F1419;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.follow-btn:hover {
+    background-color: #2F3336;
+    transform: scale(1.05);
+}
+
+.dark .follow-btn {
+    background-color: #FFFFFF;
+    color: #0F1419;
+}
+
+.dark .follow-btn:hover {
+    background-color: #E1E8ED;
+}
+
+/* Mobile navigation */
+.mobile-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    color: #657786;
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.mobile-nav-btn.active {
+    color: #1DA1F2;
+}
+
+.mobile-nav-btn:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+    color: #1DA1F2;
+}
+
+.mobile-notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: #1DA1F2;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tweet actions improved */
+.tweet-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #657786;
+    font-size: 13px;
+}
+
+.tweet-action-btn:hover {
+    transform: translateY(-1px);
+}
+
+.tweet-action-btn.reply:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+    color: #1DA1F2;
+}
+
+.tweet-action-btn.retweet:hover {
+    background-color: rgba(23, 191, 99, 0.1);
+    color: #17BF63;
+}
+
+.tweet-action-btn.like:hover {
+    background-color: rgba(249, 24, 128, 0.1);
+    color: #F91880;
+}
+
+.tweet-action-btn.share:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+    color: #1DA1F2;
+}
+
+.tweet-action-icon {
+    width: 18px;
+    height: 18px;
+    transition: all 0.2s ease;
+}
+
+.tweet-action-btn:hover .tweet-action-icon {
+    transform: scale(1.1);
+}
+
+/* Tweet options dropdown */
+.tweet-options-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #E1E8ED;
+    z-index: 50;
+    min-width: 180px;
+    overflow: hidden;
+    animation: fadeInUp 0.2s ease;
+}
+
+.dark .tweet-options-dropdown {
+    background: #192734;
+    border-color: #2F3336;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tweet-option-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    gap: 12px;
+}
+
+.tweet-option-item:hover {
+    background-color: #F7F9FA;
+}
+
+.dark .tweet-option-item:hover {
+    background-color: #1E2732;
+}
+
+.tweet-option-item.edit {
+    color: #1DA1F2;
+}
+
+.tweet-option-item.delete {
+    color: #F91880;
+}
+
+.tweet-option-item.report {
+    color: #657786;
+}
+
+.tweet-option-item.bookmark {
+    color: #657786;
+}
+
+.tweet-option-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* General improvements */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 2px solid #1DA1F2;
+    outline-offset: 2px;
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

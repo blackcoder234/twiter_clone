@@ -1,0 +1,195 @@
+{% extends "app/base.html" %}
+
+{% block title %}Tweet / Twitter{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl border-x min-h-screen" style="border-color: var(--border-color);">
+    <!-- Header - Fixed sticky header with proper theme variables -->
+    <div class="sticky top-0 backdrop-blur-md border-b p-4 flex items-center space-x-4" 
+         style="background-color: var(--bg-primary); 
+                border-color: var(--border-color);
+                backdrop-filter: blur(12px);">
+        <button class="p-2 rounded-full transition-colors" 
+                style="color: var(--text-primary);"
+                onmouseover="this.style.backgroundColor='var(--bg-secondary)'" 
+                onmouseout="this.style.backgroundColor='transparent'">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </button>
+        <h1 class="text-xl font-bold" style="color: var(--text-primary);">Tweet</h1>
+    </div>
+    
+    <!-- Main Tweet -->
+    <div class="p-4 border-b" style="border-color: var(--border-color);">
+        <div class="flex space-x-3 mb-4">
+            <div class="w-12 h-12 bg-gray-600 rounded-full flex-shrink-0"></div>
+            <div>
+                <div class="font-bold text-lg" style="color: var(--text-primary);">Sarah Johnson</div>
+                <div style="color: var(--text-secondary);">@sarah_codes</div>
+            </div>
+        </div>
+        
+        <div class="text-2xl leading-relaxed mb-4" style="color: var(--text-primary);">
+            Just shipped a new feature! The feeling when your code works perfectly on the first try is unmatched 🚀
+        </div>
+        
+        <div style="color: var(--text-secondary);" class="mb-4">
+            2:30 PM · Mar 15, 2024 · <span style="color: var(--text-primary);">1.2M</span> Views
+        </div>
+        
+        <div class="border-t border-b py-4 my-4" style="border-color: var(--border-color);">
+            <div class="flex space-x-8 text-center">
+                <div>
+                    <span style="color: var(--text-primary);" class="font-bold">8</span>
+                    <span style="color: var(--text-secondary);" class="ml-1">Retweets</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-primary);" class="font-bold">42</span>
+                    <span style="color: var(--text-secondary);" class="ml-1">Likes</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-primary);" class="font-bold">3</span>
+                    <span style="color: var(--text-secondary);" class="ml-1">Bookmarks</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-around py-2 border-b" style="border-color: var(--border-color); color: var(--text-secondary);">
+            <button class="hover:text-blue-500 transition-colors group">
+                <div class="p-3 rounded-full group-hover:bg-blue-500/10 transition-colors">
+                    <i class="fas fa-comment text-xl"></i>
+                </div>
+            </button>
+            <button class="hover:text-green-500 transition-colors group">
+                <div class="p-3 rounded-full group-hover:bg-green-500/10 transition-colors">
+                    <i class="fas fa-retweet text-xl"></i>
+                </div>
+            </button>
+            <button class="hover:text-red-500 transition-colors group">
+                <div class="p-3 rounded-full group-hover:bg-red-500/10 transition-colors">
+                    <i class="fas fa-heart text-xl"></i>
+                </div>
+            </button>
+            <button class="hover:text-blue-500 transition-colors group">
+                <div class="p-3 rounded-full group-hover:bg-blue-500/10 transition-colors">
+                    <i class="fas fa-share text-xl"></i>
+                </div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Reply Form -->
+    <div class="p-4 border-b" style="border-color: var(--border-color);">
+        <div class="flex space-x-4">
+            <div class="w-12 h-12 bg-gray-600 rounded-full flex-shrink-0"></div>
+            <div class="flex-1">
+                <textarea 
+                    placeholder="Tweet your reply" 
+                    class="w-full bg-transparent text-xl placeholder-gray-500 resize-none border-none outline-none"
+                    rows="3"
+                    style="color: var(--text-primary);"
+                ></textarea>
+                <div class="flex justify-end mt-4">
+                    <button class="font-bold px-6 py-2 rounded-full transition-colors" 
+                            style="background-color: var(--accent-color); color: white;"
+                            onmouseover="this.style.backgroundColor='var(--accent-hover)'" 
+                            onmouseout="this.style.backgroundColor='var(--accent-color)'">
+                        Reply
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Replies -->
+    <div>
+        <!-- Reply 1 -->
+        <div class="border-b p-4 cursor-pointer transition-colors" 
+             style="border-color: var(--border-color);"
+             onmouseover="this.style.backgroundColor='var(--bg-secondary)'" 
+             onmouseout="this.style.backgroundColor='transparent'">
+            <div class="flex space-x-3">
+                <div class="w-12 h-12 bg-gray-600 rounded-full flex-shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold" style="color: var(--text-primary);">Mike Developer</span>
+                        <span style="color: var(--text-secondary);">@mikedev</span>
+                        <span style="color: var(--text-secondary);">·</span>
+                        <span style="color: var(--text-secondary);">1h</span>
+                    </div>
+                    <div class="mt-2 text-lg leading-relaxed" style="color: var(--text-primary);">
+                        Congrats! That's always such a great feeling. What kind of feature did you build?
+                    </div>
+                    <div class="flex items-center justify-between mt-4 max-w-md" style="color: var(--text-secondary);">
+                        <button class="flex items-center space-x-2 hover:text-blue-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <span>1</span>
+                        </button>
+                        <button class="flex items-center space-x-2 hover:text-green-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-green-500/10 transition-colors">
+                                <i class="fas fa-retweet"></i>
+                            </div>
+                        </button>
+                        <button class="flex items-center space-x-2 hover:text-red-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-red-500/10 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <span>5</span>
+                        </button>
+                        <button class="hover:text-blue-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors">
+                                <i class="fas fa-share"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reply 2 -->
+        <div class="border-b p-4 cursor-pointer transition-colors" 
+             style="border-color: var(--border-color);"
+             onmouseover="this.style.backgroundColor='var(--bg-secondary)'" 
+             onmouseout="this.style.backgroundColor='transparent'">
+            <div class="flex space-x-3">
+                <div class="w-12 h-12 bg-gray-600 rounded-full flex-shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold" style="color: var(--text-primary);">Emma Code</span>
+                        <span style="color: var(--text-secondary);">@emmacode</span>
+                        <span style="color: var(--text-secondary);">·</span>
+                        <span style="color: var(--text-secondary);">45m</span>
+                    </div>
+                    <div class="mt-2 text-lg leading-relaxed" style="color: var(--text-primary);">
+                        The best feeling in the world! 🎉 Keep up the great work!
+                    </div>
+                    <div class="flex items-center justify-between mt-4 max-w-md" style="color: var(--text-secondary);">
+                        <button class="flex items-center space-x-2 hover:text-blue-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                        </button>
+                        <button class="flex items-center space-x-2 hover:text-green-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-green-500/10 transition-colors">
+                                <i class="fas fa-retweet"></i>
+                            </div>
+                        </button>
+                        <button class="flex items-center space-x-2 hover:text-red-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-red-500/10 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <span>12</span>
+                        </button>
+                        <button class="hover:text-blue-500 transition-colors group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors">
+                                <i class="fas fa-share"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

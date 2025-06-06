@@ -1,0 +1,168 @@
+{% extends "app/base.html" %}
+{% block title %}Add Tweet / TwitterClone{% endblock %}
+{% block content %}
+<div class="flex max-w-6xl mx-auto">
+  <div class="flex-1 max-w-2xl border-x min-h-screen" style="border-color: var(--border-color)">
+    <!-- Header -->
+    <div class="sticky top-0 backdrop-blur-md border-b p-4" 
+         style="background-color: var(--bg-primary); border-color: var(--border-color); backdrop-filter: blur(12px); z-index: 10;">
+      <h1 class="text-xl font-bold" style="color: var(--text-primary)">Compose Tweet</h1>
+    </div>
+
+    <!-- Tweet Form -->
+    <div class="p-4">
+      <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        
+        <div class="flex space-x-3">
+          <!-- User Avatar -->
+          <div class="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden">
+            {% if user.profile.avatar %}
+              <img src="{{ user.profile.avatar.url }}" alt="Profile" class="w-full h-full object-cover">
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center" 
+                   style="background-color: var(--accent-color);">
+                <span class="text-white font-bold">{{ user.username.0|upper }}</span>
+              </div>
+            {% endif %}
+          </div>
+          
+          <!-- Tweet Content -->
+          <div class="flex-1">
+            <div class="mb-4">
+              <textarea 
+                name="{{ form.text.html_name }}" 
+                id="id_text" 
+                class="w-full bg-transparent text-lg placeholder-gray-500 resize-none border-none outline-none mb-2" 
+                rows="4" 
+                placeholder="What's happening?"
+                style="color: var(--text-primary);"
+                oninput="updateCharCount(this)"
+                maxlength="280"
+              >{{ form.text.value|default:'' }}</textarea>
+              
+              <!-- Character Counter -->
+              <div class="flex justify-end">
+                <span id="charCount" class="text-sm" style="color: var(--text-secondary);">280</span>
+              </div>
+            </div>
+            
+            <!-- Media Upload -->
+            <div class="border-t pt-3 mb-3" style="border-color: var(--border-color);">
+              <div class="flex items-center">
+                <label for="id_photo" class="cursor-pointer p-2 rounded-full transition-colors mr-2"
+                       style="color: var(--accent-color);"
+                       onmouseover="this.style.backgroundColor='rgba(29, 161, 242, 0.1)'"
+                       onmouseout="this.style.backgroundColor='transparent'">
+                  <i class="fas fa-image"></i>
+                </label>
+                <div id="file-name" class="text-sm" style="color: var(--text-secondary);"></div>
+              </div>
+              
+              <input type="file" 
+                     id="id_photo" 
+                     name="{{ form.photo.html_name }}" 
+                     class="hidden" 
+                     accept="image/*"
+                     onchange="updateFileName(this)">
+              
+              <!-- Image Preview -->
+              <div id="image-preview" class="mt-3 hidden">
+                <div class="relative">
+                  <img id="preview-img" class="rounded-2xl max-h-80 w-auto" src="" alt="Preview">
+                  <button type="button" 
+                          onclick="removeImage()" 
+                          class="absolute top-2 right-2 bg-gray-900/70 text-white p-1 rounded-full">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+              <button type="submit" 
+                      id="submit-btn"
+                      class="font-bold px-6 py-2.5 rounded-full transition-colors"
+                      style="background-color: var(--accent-color); color: white;"
+                      onmouseover="this.style.backgroundColor='var(--accent-hover)'"
+                      onmouseout="this.style.backgroundColor='var(--accent-color)'">
+                Tweet
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Character count functionality
+  function updateCharCount(textarea) {
+    const maxLength = 280;
+    const currentLength = textarea.value.length;
+    const remaining = maxLength - currentLength;
+    const charCountElement = document.getElementById('charCount');
+    const submitBtn = document.getElementById('submit-btn');
+    
+    charCountElement.textContent = remaining;
+    
+    // Change color when approaching limit
+    if (remaining <= 20) {
+      charCountElement.style.color = 'var(--accent-color)';
+    } else {
+      charCountElement.style.color = 'var(--text-secondary)';
+    }
+    
+    // Disable button if over limit
+    if (remaining < 0) {
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.5';
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    }
+  }
+  
+  // File name display and image preview
+  function updateFileName(input) {
+    const fileNameElement = document.getElementById('file-name');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    
+    if (input.files && input.files[0]) {
+      const fileName = input.files[0].name;
+      fileNameElement.textContent = fileName;
+      
+      // Show image preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        imagePreview.classList.remove('hidden');
+      }
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      fileNameElement.textContent = '';
+      imagePreview.classList.add('hidden');
+    }
+  }
+  
+  // Remove selected image
+  function removeImage() {
+    const fileInput = document.getElementById('id_photo');
+    const fileNameElement = document.getElementById('file-name');
+    const imagePreview = document.getElementById('image-preview');
+    
+    fileInput.value = '';
+    fileNameElement.textContent = '';
+    imagePreview.classList.add('hidden');
+  }
+  
+  // Initialize character count on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('id_text');
+    updateCharCount(textarea);
+  });
+</script>
+{% endblock %}

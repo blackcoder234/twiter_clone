@@ -1,0 +1,176 @@
+{% extends "app/base.html" %}
+ {% block title %} 
+ {{ user.username }}'s Profile {% endblock %}
+
+{% block content %}
+<div
+  class="max-w-2xl border-x min-h-screen"
+  style="border-color: var(--border-color)"
+>
+  <!-- Header -->
+  <div
+    class="sticky top-0 backdrop-blur-md border-b p-4 flex items-center space-x-4 z-10"
+    style="
+      background-color: var(--bg-primary);
+      border-color: var(--border-color);
+      backdrop-filter: blur(12px);
+      background-opacity: 0.9;
+    "
+  >
+    <button
+      class="p-2 rounded-full transition-colors"
+      style="color: var(--text-primary)"
+      onmouseover="this.style.backgroundColor='var(--bg-secondary)'"
+      onmouseout="this.style.backgroundColor='transparent'"
+    >
+      <a href="{% url 'back' %}"><i class="fas fa-arrow-left text-xl"></i></a>
+    </button>
+    <div>
+      <h1 class="text-xl font-bold" style="color: var(--text-primary)">
+        {{ user.username }}
+      </h1>
+      <p style="color: var(--text-secondary)">{{ user.tweet_count }} Tweets</p>
+    </div>
+  </div>
+
+  <!-- Profile Header -->
+  <div class="relative">
+    <div class="h-48 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+    <div class="absolute -bottom-16 left-4">
+      {% if user_profile.avatar %}
+      <img
+        src="{{ user_profile.avatar.url }}"
+        alt="Avatar"
+        class="w-32 h-32 rounded-full border-4 object-cover"
+        style="border-color: var(--bg-primary); background: #444"
+      />
+      {% else %}
+      <div
+        class="w-32 h-32 bg-gray-600 rounded-full border-4 flex items-center justify-center text-white text-4xl"
+        style="border-color: var(--bg-primary)"
+      >
+        <i class="fas fa-user"></i>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="pt-20 px-4 pb-4">
+    <div class="flex justify-end mb-4">
+      <button
+        class="px-6 py-2 rounded-full transition-colors border"
+        style="border-color: var(--border-color); color: var(--text-primary)"
+        onmouseover="this.style.backgroundColor='var(--bg-secondary)'"
+        onmouseout="this.style.backgroundColor='transparent'"
+      >
+       <a href="{% url 'edit_user_profile' user_profile.id %}">Edit profile</a>
+      </button>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold" style="color: var(--text-primary)">
+        {{ user.get_full_name|default:user.username }}
+      </h2>
+      <p style="color: var(--text-secondary)">@{{ user.username }}</p>
+    </div>
+
+    <p class="mb-4" style="color: var(--text-primary)">
+      {{ user_profile.bio }}
+    </p>
+
+    <div class="flex space-x-6 mb-6">
+      <span style="color: var(--text-secondary)"
+        ><strong style="color: var(--text-primary)">256</strong> Following</span
+      >
+      <span style="color: var(--text-secondary)"
+        ><strong style="color: var(--text-primary)">1.2K</strong>
+        Followers</span
+      >
+    </div>
+  </div>
+
+  <!-- Profile Tabs -->
+  <div class="border-b" style="border-color: var(--border-color)">
+    <div class="flex">
+      <button
+        class="flex-1 p-4 font-bold relative"
+        style="color: var(--text-primary)"
+      >
+        Tweets
+        <div
+          class="absolute bottom-0 left-0 right-0 h-1 bg-blue-500 rounded-full"
+        ></div>
+      </button>
+      <button
+        class="flex-1 p-4 transition-colors"
+        style="color: var(--text-secondary)"
+        onmouseover="this.style.color='var(--text-primary)'"
+        onmouseout="this.style.color='var(--text-secondary)'"
+      >
+        Replies
+      </button>
+      <button
+        class="flex-1 p-4 transition-colors"
+        style="color: var(--text-secondary)"
+        onmouseover="this.style.color='var(--text-primary)'"
+        onmouseout="this.style.color='var(--text-secondary)'"
+      >
+        Media
+      </button>
+      <button
+        class="flex-1 p-4 transition-colors"
+        style="color: var(--text-secondary)"
+        onmouseover="this.style.color='var(--text-primary)'"
+        onmouseout="this.style.color='var(--text-secondary)'"
+      >
+        Likes
+      </button>
+    </div>
+  </div>
+
+  <!-- User Tweets -->
+  {% if has_tweets %}
+  <div>
+    <!-- Tweets -->
+    {% for tweet in user.tweets.all %}
+    <div
+      class="border-b p-4 cursor-pointer transition-colors"
+      style="border-color: var(--border-color)"
+      onmouseover="this.style.backgroundColor='var(--bg-secondary)'"
+      onmouseout="this.style.backgroundColor='transparent'"
+    >
+      <div class="flex space-x-3">
+        <div class="w-12 h-12 bg-gray-600 rounded-full flex-shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-2">
+            <span class="font-bold" style="color: var(--text-primary)"
+              >{{ user.get_full_name }}</span
+            >
+            <span style="color: var(--text-secondary)"
+              >@{{ user.username }}</span
+            >
+            <span style="color: var(--text-secondary)">·</span>
+            <span style="color: var(--text-secondary)"
+              >{{ tweet.created_at }}</span
+            >
+          </div>
+          <div
+            class="mt-2 text-lg leading-relaxed"
+            style="color: var(--text-primary)"
+          >
+            {{ tweet.text }}
+          </div>
+          <div
+            class="flex items-center justify-between mt-4 max-w-md"
+            style="color: var(--text-secondary)"
+          >
+            <!-- Keep existing tweet interaction buttons -->
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

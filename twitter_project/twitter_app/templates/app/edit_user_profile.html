@@ -1,0 +1,157 @@
+{% extends "app/base.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="flex max-w-6xl mx-auto">
+  <div class="flex-1 max-w-2xl border-x min-h-screen" style="border-color: var(--border-color)">
+    <!-- Header -->
+    <div class="sticky top-0 backdrop-blur-md border-b p-4 flex items-center space-x-4 z-10"
+         style="background-color: var(--bg-primary); border-color: var(--border-color); backdrop-filter: blur(12px); background-opacity: 0.9;">
+      <button class="p-2 rounded-full transition-colors" 
+              style="color: var(--text-primary)"
+              onmouseover="this.style.backgroundColor='var(--bg-secondary)'" 
+              onmouseout="this.style.backgroundColor='transparent'">
+        <a href="{% url 'user_profile' user.id %}"><i class="fas fa-arrow-left text-xl"></i></a>
+      </button>
+      <div>
+        <h1 class="text-xl font-bold" style="color: var(--text-primary)">Edit Profile</h1>
+      </div>
+    </div>
+
+    <!-- Edit Profile Form -->
+    <div class="p-6">
+      <form method="POST" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <!-- Avatar Section -->
+        <div>
+          <label class="block text-sm font-medium mb-2" style="color: var(--text-primary)">Profile Photo</label>
+          <div class="flex items-start space-x-4">
+            <!-- Current Avatar Preview -->
+            <div class="w-24 h-24 rounded-full overflow-hidden border-2" style="border-color: var(--border-color);">
+              <div id="avatar-preview" class="w-full h-full bg-gray-600 flex items-center justify-center">
+                {% if user.profile.avatar %}
+                  <img src="{{ user.profile.avatar.url }}" alt="Current avatar" class="w-full h-full object-cover" id="current-avatar">
+                {% else %}
+                  <i class="fas fa-user text-3xl" style="color: var(--text-secondary)"></i>
+                {% endif %}
+              </div>
+            </div>
+            
+            <!-- Upload Button -->
+            <div class="flex-1">
+              <label for="id_avatar" 
+                     class="inline-block px-4 py-2 rounded-full cursor-pointer transition-colors"
+                     style="background-color: var(--bg-secondary); color: var(--text-primary);"
+                     onmouseover="this.style.backgroundColor='var(--border-color)'"
+                     onmouseout="this.style.backgroundColor='var(--bg-secondary)'">
+                <i class="fas fa-camera mr-2"></i> Change photo
+              </label>
+              <input type="file" id="id_avatar" name="{{ form.avatar.html_name }}" class="hidden" accept="image/*" onchange="previewAvatar(this)">
+              <p class="mt-2 text-sm" style="color: var(--text-secondary)">
+                Recommended: Square JPG, PNG. Max 5MB.
+              </p>
+              <div id="file-name" class="mt-2 text-sm" style="color: var(--accent-color);"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bio Section -->
+        <div>
+          <label for="id_bio" class="block text-sm font-medium mb-2" style="color: var(--text-primary)">Bio</label>
+          <div class="relative">
+            <textarea 
+              id="id_bio" 
+              name="{{ form.bio.html_name }}" 
+              rows="4" 
+              class="w-full p-3 rounded-lg border resize-none focus:ring-2 focus:ring-opacity-50"
+              style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color); 
+                     focus:ring-color: var(--accent-color);"
+              placeholder="Tell us about yourself..."
+              maxlength="200"
+              onkeyup="updateCharCount(this)"
+            >{{ form.bio.value|default:'' }}</textarea>
+            <div class="absolute bottom-3 right-3">
+              <span id="char-count" class="text-sm" style="color: var(--text-secondary);">200</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Save Button -->
+        <div class="flex justify-end space-x-3">
+          <a href="{% url 'user_profile' user.id %}" 
+             class="px-5 py-2 rounded-full border transition-colors"
+             style="border-color: var(--border-color); color: var(--text-primary);"
+             onmouseover="this.style.backgroundColor='var(--bg-secondary)'"
+             onmouseout="this.style.backgroundColor='transparent'">
+            Cancel
+          </a>
+          <button type="submit" 
+                  class="px-5 py-2 rounded-full transition-colors"
+                  style="background-color: var(--accent-color); color: white;"
+                  onmouseover="this.style.backgroundColor='var(--accent-hover)'"
+                  onmouseout="this.style.backgroundColor='var(--accent-color)'">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Character count for bio
+  function updateCharCount(textarea) {
+    const maxLength = 200;
+    const currentLength = textarea.value.length;
+    const remaining = maxLength - currentLength;
+    const charCountElement = document.getElementById('char-count');
+    
+    charCountElement.textContent = remaining;
+    
+    // Change color when approaching limit
+    if (remaining <= 20) {
+      charCountElement.style.color = 'var(--accent-color)';
+    } else {
+      charCountElement.style.color = 'var(--text-secondary)';
+    }
+  }
+  
+  // Avatar preview functionality
+  function previewAvatar(input) {
+    const fileNameElement = document.getElementById('file-name');
+    const avatarPreview = document.getElementById('avatar-preview');
+    
+    if (input.files && input.files[0]) {
+      const fileName = input.files[0].name;
+      fileNameElement.textContent = fileName;
+      
+      // Show image preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Create new image or update existing
+        let previewImg = document.getElementById('current-avatar');
+        if (!previewImg) {
+          // If no image exists, create one and replace the icon
+          avatarPreview.innerHTML = '';
+          previewImg = document.createElement('img');
+          previewImg.id = 'current-avatar';
+          previewImg.classList.add('w-full', 'h-full', 'object-cover');
+          avatarPreview.appendChild(previewImg);
+        }
+        previewImg.src = e.target.result;
+      }
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      fileNameElement.textContent = '';
+    }
+  }
+  
+  // Initialize character count on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('id_bio');
+    updateCharCount(textarea);
+  });
+</script>
+{% endblock %}

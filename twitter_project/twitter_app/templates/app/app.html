@@ -1,0 +1,276 @@
+{% extends "app/base.html" %} {% block title %}Home / TwitterClone{% endblock %}
+{% block content %}
+<div class="flex max-w-6xl mx-auto">
+  <!-- Main Feed -->
+  <div
+    class="flex-1 max-w-2xl border-x min-h-screen"
+    style="border-color: var(--border-color)"
+  >
+    <!-- Header -->
+    <div
+      class="sticky top-0 backdrop-blur-md border-b p-3"
+      style="
+        background-color: var(--bg-primary);
+        border-color: var(--border-color);
+        backdrop-filter: blur(12px);
+        background-opacity: 0.8;
+      "
+    >
+      <h1 class="text-lg font-bold" style="color: var(--text-primary)">Home</h1>
+    </div>
+
+    <!-- Compose Tweet -->
+    <div class="border-b p-4" style="border-color: var(--border-color)">
+      <div class="flex space-x-3">
+        
+        <div class="flex-1">
+          <textarea
+            placeholder="What's happening?"
+            class="w-full bg-transparent text-lg placeholder-gray-500 resize-none border-none outline-none"
+            rows="2"
+            style="color: var(--text-primary)"
+          ></textarea>
+          <div class="flex items-center justify-between ">
+            <div class="flex space-x-3">
+              <button
+                class="p-2 rounded-full transition-colors"
+                style="color: var(--accent-color)"
+                onmouseover="this.style.backgroundColor='rgba(29, 161, 242, 0.1)'"
+                onmouseout="this.style.backgroundColor='transparent'"
+              >
+                <i class="fas fa-image"></i>
+              </button>
+              <button
+                class="p-2 rounded-full transition-colors"
+                style="color: var(--accent-color)"
+                onmouseover="this.style.backgroundColor='rgba(29, 161, 242, 0.1)'"
+                onmouseout="this.style.backgroundColor='transparent'"
+              >
+                <i class="fas fa-gif"></i>
+              </button>
+              <button
+                class="p-2 rounded-full transition-colors"
+                style="color: var(--accent-color)"
+                onmouseover="this.style.backgroundColor='rgba(29, 161, 242, 0.1)'"
+                onmouseout="this.style.backgroundColor='transparent'"
+              >
+                <i class="fas fa-smile"></i>
+              </button>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-sm" style="color: var(--text-secondary)"
+                >280</span
+              >
+              <button
+                class="font-bold px-4 py-1.5 rounded-full transition-colors"
+                style="background-color: var(--accent-color); color: white"
+                onmouseover="this.style.backgroundColor='var(--accent-hover)'"
+                onmouseout="this.style.backgroundColor='var(--accent-color)'"
+              >
+                <a href="/app/add_tweet">Tweet</a>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tweet Feed -->
+    {% if tweet_list %}
+    <div>
+      {% for tweet in tweet_list %}
+      <div
+        class="tweet-hover border-b p-4 cursor-pointer transition-colors"
+        style="border-color: var(--border-color)"
+      >
+        <div class="flex space-x-3">
+          <!-- User Avatar -->
+          <div class="w-10 h-10 rounded-full flex-shrink-0 overflow-hidden">
+            {% if tweet.user.profile.avatar %}
+            <img
+              src="{{ tweet.user.profile.avatar.url }}"
+              alt="{{ tweet.user.username }}"
+              class="w-full h-full object-cover"
+            />
+            {% else %}
+            <div
+              class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500 text-white font-bold"
+            >
+              {{ tweet.user.username|first|upper }}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <!-- Tweet Header -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="font-bold hover:underline"
+                  >{{ tweet.user.get_full_name }}</span
+                >
+                <span style="color: var(--text-secondary)"
+                  >@{{ tweet.user.username }}</span
+                >
+                <span style="color: var(--text-secondary)">·</span>
+                <span
+                  style="color: var(--text-secondary)"
+                  title="{{ tweet.created_at }}"
+                >
+                  {{ tweet.created_at|timesince }} ago
+                </span>
+              </div>
+
+              <!-- Edit/Delete Options -->
+              {% if tweet.user == user %}
+              <div class="relative dropdown-tweet">
+                <button
+                  class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
+                >
+                  <i
+                    class="fas fa-ellipsis-h"
+                    style="color: var(--text-secondary)"
+                  ></i>
+                </button>
+                <div
+                  class="dropdown-menu hidden absolute right-0 mt-1 w-40 rounded-md shadow-lg py-1 z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
+                >
+                  <a
+                    href="{% url 'edit_tweet' tweet.id %}"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    <i class="fas fa-edit mr-2"></i> Edit
+                  </a>
+                  <a
+                    href="{% url 'delete_tweet' tweet.id %}"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 text-red-600"
+                  >
+                    <i class="fas fa-trash mr-2"></i> Delete
+                  </a>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Tweet Content -->
+            <div class="mt-2 leading-relaxed">{{ tweet.text }}</div>
+
+            <!-- Tweet Image (if any) -->
+            {% if tweet.photo %}
+            <div
+              class="mt-3 rounded-2xl overflow-hidden border"
+              style="border-color: var(--border-color)"
+            >
+              <img
+                src="{{ tweet.photo.url }}"
+                alt="Tweet image"
+                class="w-full h-auto max-h-96 object-cover"
+              />
+            </div>
+            {% endif %}
+
+            <!-- Tweet Actions -->
+            <div
+              class="flex items-center justify-between mt-4 max-w-md"
+              style="color: var(--text-secondary)"
+            >
+              <button
+                class="flex items-center space-x-2 hover:text-blue-500 transition-colors group"
+              >
+                <div
+                  class="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors"
+                >
+                  <i class="fas fa-comment"></i>
+                </div>
+                <span>{{ tweet.id|add:"3" }}</span>
+              </button>
+
+              <button
+                class="flex items-center space-x-2 hover:text-green-500 transition-colors group"
+              >
+                <div
+                  class="p-2 rounded-full group-hover:bg-green-500/10 transition-colors"
+                >
+                  <i class="fas fa-retweet"></i>
+                </div>
+                <span>{{ tweet.id|add:"8" }}</span>
+              </button>
+
+              <button
+                class="flex items-center space-x-2 hover:text-red-500 transition-colors group like-button"
+              >
+                <div
+                  class="p-2 rounded-full group-hover:bg-red-500/10 transition-colors"
+                >
+                  <i class="fas fa-heart"></i>
+                </div>
+                <span class="like-count">{{ tweet.id|add:"12" }}</span>
+              </button>
+
+              <button class="hover:text-blue-500 transition-colors group">
+                <div
+                  class="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors"
+                >
+                  <i class="fas fa-share"></i>
+                </div>
+              </button>
+
+              <button class="hover:text-blue-500 transition-colors group">
+                <div
+                  class="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors"
+                >
+                  <i class="fas fa-bookmark"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <script>
+      // Dropdown functionality for tweet options
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdownButtons = document.querySelectorAll(
+          ".dropdown-tweet button"
+        );
+
+        dropdownButtons.forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const menu = this.nextElementSibling;
+            menu.classList.toggle("hidden");
+          });
+        });
+
+        // Close all dropdowns when clicking elsewhere
+        document.addEventListener("click", function () {
+          document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+            if (!menu.classList.contains("hidden")) {
+              menu.classList.add("hidden");
+            }
+          });
+        });
+
+        // Like button functionality (just for UI feedback)
+        const likeButtons = document.querySelectorAll(".like-button");
+        likeButtons.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const icon = this.querySelector("i");
+            const count = this.querySelector(".like-count");
+
+            if (icon.classList.contains("text-red-500")) {
+              icon.classList.remove("text-red-500");
+              count.textContent = parseInt(count.textContent) - 1;
+            } else {
+              icon.classList.add("text-red-500");
+              count.textContent = parseInt(count.textContent) + 1;
+            }
+          });
+        });
+      });
+    </script>
+  </div>
+</div>
+{% endblock %}
