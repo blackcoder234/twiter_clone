@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-c17!o2sd5a$ogt$u)$lfi0qhr0^=n@y4ilw$p4&r#&6pul5w#f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1','.onrender.com']
 
 
 # Application definition
@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'twitter_clone_db_gk86',
         'USER': 'twitter_clone_db_gk86_user',
         'PASSWORD': 'SKmcARLMMTOXptCUNAvjdq4liHUOsxpS',
-        'HOST': 'dpg-d11fb1ndiees73fagj2g-a',
+        'HOST': 'dpg-d11fb1ndiees73fagj2g-a.singapore-postgres.render.com',
         'PORT': '5432',
     }
 }
