@@ -13,6 +13,24 @@ import os
 from pathlib import Path
 import logging
 import sys
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+# Cloudinary configuration
+cloudinary.config(
+    cloud_name='blackcode',
+    api_key='523824935329674',
+    api_secret='T52qrmkAgoOyvpUP8wSHHVIYe-w',
+    secure=True
+)
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'blackcode',
+    'API_KEY': '523824935329674',
+    'API_SECRET': 'T52qrmkAgoOyvpUP8wSHHVIYe-w',
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -135,17 +153,11 @@ USE_TZ = True
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATIC_URL = 'static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR, "static")]
 
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'blackcode',
-    'API_KEY': '523824935329674',
-    'API_SECRET': 'T52qrmkAgoOyvpUP8wSHHVIYe-w',
-}
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
@@ -172,3 +184,6 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
+
+print("CLOUDINARY_STORAGE:", CLOUDINARY_STORAGE)
+print("DEFAULT_FILE_STORAGE:", DEFAULT_FILE_STORAGE)
