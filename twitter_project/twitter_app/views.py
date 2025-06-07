@@ -157,7 +157,7 @@ def edit_tweet(request, tweet_id):
             return redirect('app', tweet_id=tweet.id)
     else:
         form = TweetForm(instance=tweet)
-    return render(request, "app/edit_tweet.html", {'form': form, 'tweet': tweet})
+    return render(request, "app/add_tweet.html", {'form': form, 'tweet': tweet})
 
 @login_required
 def delete_tweet(request, tweet_id):
