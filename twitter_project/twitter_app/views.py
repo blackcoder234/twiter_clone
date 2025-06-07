@@ -159,12 +159,12 @@ def edit_tweet(request, tweet_id):
         form = TweetForm(instance=tweet)
     return render(request, "app/edit_tweet.html", {'form': form, 'tweet': tweet})
 
+@login_required
 def delete_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id, user=request.user)
-    if request.method == 'POST':
-        tweet.delete()
-        return redirect('app')
-    return render(request, "app/delete_tweet.html", {'tweet': tweet})
+    tweet.delete()
+    return redirect('app')
+
 
 def add_user_profile(request):
     if request.method == 'POST':
@@ -179,6 +179,7 @@ def add_user_profile(request):
         form = UserProfileForm()
     return render(request, "app/add_user_profile.html", {'form': form})
 
+@login_required
 def edit_user_profile(request, profile_id):
     profile = get_object_or_404(UserProfile, id=profile_id, user=request.user)
     if request.method == 'POST':
@@ -196,7 +197,7 @@ def delete_user_profile(request, profile_id):
     if request.method == 'POST':
         profile.delete()
         return redirect('app')
-    return render(request, "app/delete_user_profile.html", {'profile': profile})
+    return redirect('app')
 
 def search_tweets(request):
     query = request.GET.get('q', '')

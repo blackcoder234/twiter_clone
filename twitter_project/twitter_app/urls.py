@@ -17,4 +17,5 @@ urlpatterns = [
     path('notifications/', views.notifications, name='notifications'),
     path('notifications/mark-read/', views.mark_notifications_read, name='mark_notifications_read'),
     path('notifications/count/', views.notification_count, name='notification_count'),
+    path("search/", views.search_tweets, name="search_tweets"),
 ]

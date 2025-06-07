@@ -197,7 +197,11 @@
 
         <div class="p-4 pt-12">
           <!-- Search Bar -->
-          <div class="mb-4 relative">
+          <form
+            action="{% url 'search_tweets' %}"
+            method="get"
+            class="relative mb-3"
+          >
             <div
               class="absolute inset-y-0 left-3 flex items-center pointer-events-none"
             >
@@ -208,15 +212,19 @@
             </div>
             <input
               type="text"
+              name="q"
               placeholder="Search Twitter"
+              value="{{ query|default:'' }}"
               class="w-full py-3 pl-10 pr-4 rounded-full focus:outline-none transition-colors"
               style="
                 background-color: var(--bg-secondary);
                 color: var(--text-primary);
                 border: 1px solid transparent;
               "
+              onfocus="this.style.borderColor='var(--accent-color)'; this.style.backgroundColor='var(--bg-primary)'"
+              onblur="this.style.borderColor='transparent'; this.style.backgroundColor='var(--bg-secondary)'"
             />
-          </div>
+          </form>
 
           <!-- Trending section -->
           <div
@@ -537,7 +545,11 @@
         "
       >
         <!-- Search Bar -->
-        <div class="mb-4 relative">
+        <form
+          action="{% url 'search_tweets' %}"
+          method="get"
+          class="relative mb-4"
+        >
           <div
             class="absolute inset-y-0 left-3 flex items-center pointer-events-none"
           >
@@ -548,7 +560,9 @@
           </div>
           <input
             type="text"
+            name="q"
             placeholder="Search Twitter"
+            value="{{ query|default:'' }}"
             class="w-full py-3 pl-10 pr-4 rounded-full focus:outline-none transition-colors"
             style="
               background-color: var(--bg-secondary);
@@ -558,7 +572,7 @@
             onfocus="this.style.borderColor='var(--accent-color)'; this.style.backgroundColor='var(--bg-primary)'"
             onblur="this.style.borderColor='transparent'; this.style.backgroundColor='var(--bg-secondary)'"
           />
-        </div>
+        </form>
 
         <!-- Trending -->
         <div
