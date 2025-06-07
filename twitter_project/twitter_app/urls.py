@@ -14,4 +14,7 @@ urlpatterns = [
     path("edit_user_profile/<int:profile_id>/", views.edit_user_profile, name="edit_user_profile"),
     path("delete_user_profile/<int:profile_id>/", views.delete_user_profile, name="delete_user_profile"),
     path("tweet/<int:tweet_id>/", views.tweet_detail, name="tweet_detail"),
+    path('notifications/', views.notifications, name='notifications'),
+    path('notifications/mark-read/', views.mark_notifications_read, name='mark_notifications_read'),
+    path('notifications/count/', views.notification_count, name='notification_count'),
 ]

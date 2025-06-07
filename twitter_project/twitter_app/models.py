@@ -19,3 +19,20 @@ class Tweet(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.text}"
+    
+    
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE, null=True, blank=True)
+    notification_type = models.CharField(max_length=20, choices=[
+        ('new_tweet', 'New Tweet'),
+        ('like', 'Like'),
+        ('comment', 'Comment'),
+        ('follow', 'Follow')
+    ])
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']

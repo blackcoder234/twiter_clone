@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
 from django.contrib.auth.models import User
-from .models import Tweet, UserProfile
+from .models import Tweet, UserProfile, Notification
+from django.http import HttpResponse, JsonResponse
 from .forms import customSignupForm, TweetForm, UserProfileForm
 from .models import UserProfile
 from django.contrib import messages
@@ -86,6 +87,21 @@ def tweet_detail(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
     return render(request, "app/tweet_detail.html", {'tweet': tweet})
 
+
+def create_tweet_notification(tweet):
+    """Create notifications for all followers when a new tweet is posted"""
+    # Get all followers of the tweet author
+    followers = UserProfile.objects.filter(following=tweet.user.profile)
+    
+    # Create a notification for each follower
+    for follower_profile in followers:
+        Notification.objects.create(
+            recipient=follower_profile.user,
+            sender=tweet.user,
+            tweet=tweet,
+            notification_type='new_tweet'
+        )
+
 @login_required(login_url='login')
 def add_tweet(request):
     if request.method == 'POST':
@@ -94,11 +110,43 @@ def add_tweet(request):
             tweet = form.save(commit=False)
             tweet.user = request.user
             tweet.save()
+            create_tweet_notification(tweet)
+            
             messages.success(request, "Tweet posted successfully!")
             return redirect('app', tweet_id=tweet.id)
     else:
         form = TweetForm()
     return render(request, "app/add_tweet.html", {'form': form})
+
+
+@login_required
+def notifications(request):
+    """View to display notifications"""
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-created_at')
+    unread_count = notifications.filter(is_read=False).count()
+    
+    return render(request, "app/notifications.html", {
+        'notifications': notifications,
+        'unread_count': unread_count
+    })
+
+@login_required
+def mark_notifications_read(request):
+    """Mark notifications as read"""
+    if request.method == 'POST':
+        notification_ids = request.POST.getlist('notification_ids')
+        if not notification_ids:  # If no specific IDs, mark all as read
+            Notification.objects.filter(recipient=request.user, is_read=False).update(is_read=True)
+        else:
+            Notification.objects.filter(id__in=notification_ids, recipient=request.user).update(is_read=True)
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)
+
+@login_required
+def notification_count(request):
+    """API endpoint to get unread notification count"""
+    count = Notification.objects.filter(recipient=request.user, is_read=False).count()
+    return JsonResponse({'count': count})
 
 def edit_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id, user=request.user)

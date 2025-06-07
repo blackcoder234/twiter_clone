@@ -1,0 +1,114 @@
+{% extends "app/base.html" %}
+{% load time_config %}
+
+{% block title %}Notifications / TwitterClone{% endblock %}
+
+{% block content %}
+<div class="flex max-w-6xl mx-auto">
+  <div class="flex-1 max-w-2xl border-x min-h-screen" style="border-color: var(--border-color)">
+    <!-- Header -->
+    <div class="sticky top-0 z-10 bg-[var(--bg-primary)] bg-opacity-80 backdrop-blur-sm border-b flex items-center justify-between p-4" style="border-color: var(--border-color)">
+      <h1 class="text-xl font-bold">Notifications</h1>
+      {% if unread_count > 0 %}
+      <button id="mark-all-read" class="text-sm text-[var(--accent-color)] hover:underline">Mark all as read</button>
+      {% endif %}
+    </div>
+
+    <!-- Notifications List -->
+    <div id="notifications-container">
+      {% if notifications %}
+        {% for notification in notifications %}
+          <div class="notification-item p-4 border-b hover:bg-[var(--bg-hover)]" 
+               style="border-color: var(--border-color)"
+               data-id="{{ notification.id }}">
+            <div class="flex items-start space-x-4">
+              <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                {% if notification.sender.profile.avatar %}
+                  <img src="{{ notification.sender.profile.avatar.url }}" class="w-full h-full object-cover" alt="{{ notification.sender.username }}" />
+                {% else %}
+                  <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500 text-white font-bold">
+                    {{ notification.sender.username|first|upper }}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center mb-1">
+                  <span class="font-bold mr-1">{{ notification.sender.get_full_name|default:notification.sender.username }}</span>
+                  <span style="color: var(--text-secondary)">@{{ notification.sender.username }}</span>
+                  <span class="mx-1" style="color: var(--text-secondary)">·</span>
+                  <span style="color: var(--text-secondary)">{{ notification.created_at|configured_time }} ago</span>
+                  {% if not notification.is_read %}
+                  <span class="ml-2 w-2 h-2 rounded-full bg-[var(--accent-color)]"></span>
+                  {% endif %}
+                </div>
+                
+                {% if notification.notification_type == 'new_tweet' %}
+                  <p>Posted a new tweet: <a href="{% url 'tweet_detail' notification.tweet.id %}" class="hover:underline text-[var(--accent-color)]">"{{ notification.tweet.content|truncatechars:50 }}"</a></p>
+                {% elif notification.notification_type == 'like' %}
+                  <p>Liked your tweet</p>
+                {% elif notification.notification_type == 'comment' %}
+                  <p>Commented on your tweet</p>
+                {% elif notification.notification_type == 'follow' %}
+                  <p>Started following you</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="p-8 text-center" style="color: var(--text-secondary)">
+          <p>No notifications yet</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mark individual notification as read when clicked
+    document.querySelectorAll('.notification-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const notificationId = this.dataset.id;
+        markAsRead([notificationId]);
+        
+        // Remove the unread indicator dot
+        const indicator = this.querySelector('.bg-[var(--accent-color)]');
+        if (indicator) indicator.remove();
+      });
+    });
+    
+    // Mark all as read button
+    const markAllReadBtn = document.getElementById('mark-all-read');
+    if (markAllReadBtn) {
+      markAllReadBtn.addEventListener('click', function() {
+        markAsRead();
+        // Remove all unread indicators
+        document.querySelectorAll('.bg-[var(--accent-color)]').forEach(el => el.remove());
+        this.remove(); // Remove the "Mark all as read" button
+      });
+    }
+    
+    // Function to mark notifications as read
+    function markAsRead(ids = []) {
+      const formData = new FormData();
+      if (ids.length > 0) {
+        ids.forEach(id => formData.append('notification_ids', id));
+      }
+      
+      // Get CSRF token
+      const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+      
+      fetch('/app/notifications/mark-read/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': csrfToken
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

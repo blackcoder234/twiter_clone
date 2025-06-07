@@ -1,5 +1,4 @@
-{% load time_config %}
-{% load static tailwind_tags %} {% load static %} 
+{% load time_config %} {% load static tailwind_tags %} {% load static %}
 
 <!DOCTYPE html>
 <html lang="en" class="dark">
@@ -16,6 +15,336 @@
     />
   </head>
   <body class="min-h-screen theme-transition">
+    <!-- Add this right after the opening body tag -->
+    <div
+      id="mobile-left-sidebar"
+      class="fixed inset-0 z-50 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div
+        class="absolute inset-0 bg-black bg-opacity-50"
+        id="left-sidebar-backdrop"
+      ></div>
+      <div
+        class="absolute left-0 top-0 bottom-0 w-5/6 max-w-xs bg-[var(--bg-primary)] border-r overflow-y-auto"
+        style="border-color: var(--border-color)"
+      >
+        <!-- Close button -->
+        <button
+          id="close-left-sidebar"
+          class="absolute top-4 right-4 p-2 rounded-full hover:bg-[var(--bg-hover)]"
+        >
+          <i class="fas fa-times" style="color: var(--text-primary)"></i>
+        </button>
+
+        <!-- Twitter logo -->
+        <div class="flex items-center space-x-2 p-4 mb-6">
+          <i
+            class="fab fa-twitter text-2xl"
+            style="color: var(--accent-color)"
+          ></i>
+          <span class="text-lg font-bold">TwitterClone</span>
+        </div>
+
+        <!-- Copy the existing navigation menu here -->
+        <nav class="space-y-1 px-4">
+          <a
+            href="/app"
+            class="nav-item flex items-center space-x-3 rounded-full transition-colors p-3"
+          >
+            <i class="fas fa-home text-lg"></i>
+            <span>Home</span>
+          </a>
+          <a
+            href="/explore"
+            class="nav-item flex items-center space-x-3 rounded-full transition-colors p-3"
+          >
+            <i class="fas fa-search text-lg"></i>
+            <span>Explore</span>
+          </a>
+          <a
+            href="/app/notifications"
+            class="nav-item flex items-center space-x-3 rounded-full transition-colors p-3 relative"
+          >
+            <i class="fas fa-bell text-lg"></i>
+            <span>Notifications</span>
+            <span
+              id="mobile-sidebar-notification-badge"
+              class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              style="display: none"
+              >0</span
+            >
+          </a>
+          <a
+            href="/messages"
+            class="nav-item flex items-center space-x-3 rounded-full transition-colors p-3"
+          >
+            <i class="fas fa-envelope text-lg"></i>
+            <span>Messages</span>
+          </a>
+          {% if user.is_authenticated %}
+          <a
+            href="{% url 'user_profile' user.id %}"
+            class="nav-item flex items-center space-x-3 rounded-full transition-colors p-3"
+          >
+            <i class="fas fa-user text-lg"></i>
+            <span>Profile</span>
+          </a>
+          {% else %}
+          <a
+            href="{% url 'login' %}"
+            class="nav-item flex items-center space-x-3 rounded-full transition-colors p-3"
+          >
+            <i class="fas fa-user text-lg"></i>
+            <span>Login</span>
+          </a>
+          {% endif %}
+        </nav>
+
+        <!-- Tweet button -->
+        <div class="px-4 mt-6">
+          <button
+            onclick="handleTweetClick()"
+            class="font-bold py-2.5 px-6 rounded-full w-full transition-colors"
+            style="background-color: var(--accent-color); color: white"
+          >
+            Tweet
+          </button>
+        </div>
+
+        <!-- User info if authenticated -->
+        {% if user.is_authenticated %}
+        <div
+          class="mt-10 px-4 border-t pt-4"
+          style="border-color: var(--border-color)"
+        >
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full overflow-hidden">
+              {% if user.profile.avatar %}
+              <img
+                src="{{ user.profile.avatar.url }}"
+                alt="Profile"
+                class="w-full h-full object-cover"
+              />
+              {% else %}
+              <div
+                class="w-full h-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold"
+              >
+                {{ user.get_full_name|default:user.username|first|upper }}
+              </div>
+              {% endif %}
+            </div>
+            <div>
+              <div class="font-bold">
+                {{ user.get_full_name|default:user.username }}
+              </div>
+              <div class="text-sm" style="color: var(--text-secondary)">
+                @{{ user.username }}
+              </div>
+            </div>
+          </div>
+          <a
+            href="/app/logout"
+            class="block mt-4 p-3 text-center rounded-full border"
+            style="border-color: var(--border-color)"
+          >
+            Log out
+          </a>
+        </div>
+        {% else %}
+        <div class="px-4 mt-10 space-y-3">
+          <a
+            href="/app/login"
+            class="block text-center py-2.5 px-4 rounded-full border transition-colors"
+            style="
+              border-color: var(--accent-color);
+              color: var(--accent-color);
+            "
+          >
+            Login
+          </a>
+          <a
+            href="/app/signup"
+            class="block text-center py-2.5 px-4 rounded-full transition-colors"
+            style="background-color: var(--accent-color); color: white"
+          >
+            Sign Up
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right sidebar for mobile -->
+    <div
+      id="mobile-right-sidebar"
+      class="fixed inset-0 z-50 md:hidden transform translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div
+        class="absolute inset-0 bg-black bg-opacity-50"
+        id="right-sidebar-backdrop"
+      ></div>
+      <div
+        class="absolute right-0 top-0 bottom-0 w-5/6 max-w-xs bg-[var(--bg-primary)] border-l overflow-y-auto"
+        style="border-color: var(--border-color)"
+      >
+        <!-- Close button -->
+        <button
+          id="close-right-sidebar"
+          class="absolute top-4 left-4 p-2 rounded-full hover:bg-[var(--bg-hover)]"
+        >
+          <i class="fas fa-times" style="color: var(--text-primary)"></i>
+        </button>
+
+        <div class="p-4 pt-12">
+          <!-- Search Bar -->
+          <div class="mb-4 relative">
+            <div
+              class="absolute inset-y-0 left-3 flex items-center pointer-events-none"
+            >
+              <i
+                class="fas fa-search text-sm"
+                style="color: var(--text-secondary)"
+              ></i>
+            </div>
+            <input
+              type="text"
+              placeholder="Search Twitter"
+              class="w-full py-3 pl-10 pr-4 rounded-full focus:outline-none transition-colors"
+              style="
+                background-color: var(--bg-secondary);
+                color: var(--text-primary);
+                border: 1px solid transparent;
+              "
+            />
+          </div>
+
+          <!-- Trending section -->
+          <div
+            class="rounded-2xl mb-4 overflow-hidden"
+            style="background-color: var(--bg-secondary)"
+          >
+            <h2
+              class="text-xl font-bold p-4 border-b"
+              style="border-color: var(--border-color)"
+            >
+              What's happening
+            </h2>
+            <!-- Trending items (simplified for mobile) -->
+            <div class="p-4 cursor-pointer transition-colors hover-item">
+              <div class="font-bold my-0.5" style="color: var(--text-primary)">
+                #WebDevelopment
+              </div>
+              <div style="color: var(--text-secondary)" class="text-sm">
+                45.2K Tweets
+              </div>
+            </div>
+            <div class="p-4 cursor-pointer transition-colors hover-item">
+              <div class="font-bold my-0.5" style="color: var(--text-primary)">
+                #AI
+              </div>
+              <div style="color: var(--text-secondary)" class="text-sm">
+                32.1K Tweets
+              </div>
+            </div>
+            <a
+              href="/explore/trending"
+              class="block p-4 hover:underline"
+              style="color: var(--accent-color)"
+            >
+              Show more
+            </a>
+          </div>
+
+          <!-- Who to follow (simplified) -->
+          <div
+            class="rounded-2xl overflow-hidden"
+            style="background-color: var(--bg-secondary)"
+          >
+            <h2
+              class="text-xl font-bold p-4 border-b"
+              style="border-color: var(--border-color)"
+            >
+              Who to follow
+            </h2>
+            <div class="p-4">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold"
+                  >
+                    ED
+                  </div>
+                  <div>
+                    <div class="font-bold" style="color: var(--text-primary)">
+                      Emily Davis
+                    </div>
+                    <div style="color: var(--text-secondary)" class="text-sm">
+                      @emily_dev
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="px-3 py-1 rounded-full font-bold text-sm"
+                  style="
+                    background-color: var(--text-primary);
+                    color: var(--bg-primary);
+                  "
+                >
+                  Follow
+                </button>
+              </div>
+              <a
+                href="/connect/people"
+                class="block pt-2 hover:underline"
+                style="color: var(--accent-color)"
+              >
+                Show more
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile header with menu buttons - Add this at the top of your content block -->
+    <div
+      class="sticky top-0 z-40 md:hidden flex items-center justify-between p-3 border-b bg-[var(--bg-primary)] bg-opacity-90 backdrop-blur-md"
+      style="border-color: var(--border-color)"
+    >
+      <button
+        id="open-left-sidebar"
+        class="p-2 rounded-full hover:bg-[var(--bg-hover)]"
+      >
+        <div class="w-8 h-8 rounded-full overflow-hidden">
+          {% if user.is_authenticated and user.profile.avatar %}
+          <img
+            src="{{ user.profile.avatar.url }}"
+            alt="Profile"
+            class="w-full h-full object-cover"
+          />
+          {% else %}
+          <div class="w-full h-full flex items-center justify-center">
+            <i class="fas fa-bars" style="color: var(--text-primary)"></i>
+          </div>
+          {% endif %}
+        </div>
+      </button>
+
+      <div class="flex items-center">
+        <i
+          class="fab fa-twitter text-2xl"
+          style="color: var(--accent-color)"
+        ></i>
+      </div>
+
+      <button
+        id="open-right-sidebar"
+        class="p-2 rounded-full hover:bg-[var(--bg-hover)]"
+      >
+        <i class="fas fa-sparkles" style="color: var(--text-primary)"></i>
+      </button>
+    </div>
+
     <div class="flex min-h-screen">
       <div class="w-1/12 hidden xl:block"></div>
       <!-- left Sidebar -->
@@ -50,11 +379,17 @@
             <span>Explore</span>
           </a>
           <a
-            href="/notifications"
-            class="nav-item flex items-center space-x-3 rounded-full transition-colors"
+            href="/app/notifications"
+            class="nav-item flex items-center space-x-3 rounded-full transition-colors relative"
           >
             <i class="fas fa-bell text-lg"></i>
             <span>Notifications</span>
+            <span
+              id="desktop-notification-badge"
+              class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              style="display: none"
+              >0</span
+            >
           </a>
           <a
             href="/messages"
@@ -479,11 +814,14 @@
         <i class="fas fa-plus text-lg"></i>
       </a>
       {% endif %}
-      <a href="app/notifications" class="p-3">
+      <a href="/app/notifications" class="p-3 relative">
         <i class="fas fa-bell text-lg"></i>
-      </a>
-      <a href="app/messages" class="p-3">
-        <i class="fas fa-envelope text-lg"></i>
+        <span
+          id="mobile-bottom-notification-badge"
+          class="absolute -top-1 -right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+          style="display: none"
+          >0</span
+        >
       </a>
       <button onclick="toggleTheme()" class="p-3">
         <i class="fas fa-moon" id="mobile-theme-icon"></i>
@@ -617,6 +955,137 @@
                 });
               }
             });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Mobile sidebar functionality
+        const openLeftSidebar = document.getElementById("open-left-sidebar");
+        const closeLeftSidebar = document.getElementById("close-left-sidebar");
+        const leftSidebar = document.getElementById("mobile-left-sidebar");
+        const leftSidebarBackdrop = document.getElementById(
+          "left-sidebar-backdrop"
+        );
+
+        const openRightSidebar = document.getElementById("open-right-sidebar");
+        const closeRightSidebar = document.getElementById(
+          "close-right-sidebar"
+        );
+        const rightSidebar = document.getElementById("mobile-right-sidebar");
+        const rightSidebarBackdrop = document.getElementById(
+          "right-sidebar-backdrop"
+        );
+
+        // Left sidebar controls
+        if (openLeftSidebar && leftSidebar) {
+          openLeftSidebar.addEventListener("click", function () {
+            leftSidebar.classList.remove("-translate-x-full");
+            document.body.classList.add("overflow-hidden"); // Prevent scrolling
+          });
+        }
+
+        if (closeLeftSidebar && leftSidebar) {
+          closeLeftSidebar.addEventListener("click", function () {
+            leftSidebar.classList.add("-translate-x-full");
+            document.body.classList.remove("overflow-hidden");
+          });
+        }
+
+        if (leftSidebarBackdrop && leftSidebar) {
+          leftSidebarBackdrop.addEventListener("click", function () {
+            leftSidebar.classList.add("-translate-x-full");
+            document.body.classList.remove("overflow-hidden");
+          });
+        }
+
+        // Right sidebar controls
+        if (openRightSidebar && rightSidebar) {
+          openRightSidebar.addEventListener("click", function () {
+            rightSidebar.classList.remove("translate-x-full");
+            document.body.classList.add("overflow-hidden");
+          });
+        }
+
+        if (closeRightSidebar && rightSidebar) {
+          closeRightSidebar.addEventListener("click", function () {
+            rightSidebar.classList.add("translate-x-full");
+            document.body.classList.remove("overflow-hidden");
+          });
+        }
+
+        if (rightSidebarBackdrop && rightSidebar) {
+          rightSidebarBackdrop.addEventListener("click", function () {
+            rightSidebar.classList.add("translate-x-full");
+            document.body.classList.remove("overflow-hidden");
+          });
+        }
+
+        // Add swipe gestures
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener("touchstart", (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener("touchend", (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe();
+        });
+
+        function handleSwipe() {
+          const swipeDistance = touchEndX - touchStartX;
+
+          // Right swipe (to open left sidebar)
+          if (swipeDistance > 100 && window.innerWidth < 768) {
+            leftSidebar.classList.remove("-translate-x-full");
+            document.body.classList.add("overflow-hidden");
+          }
+
+          // Left swipe (to open right sidebar)
+          if (swipeDistance < -100 && window.innerWidth < 768) {
+            rightSidebar.classList.remove("translate-x-full");
+            document.body.classList.add("overflow-hidden");
+          }
+        }
+      });
+    </script>
+    <script>
+      // Check for new notifications on page load and periodically
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initial check
+        checkNotifications();
+
+        // Check every 30 seconds
+        setInterval(checkNotifications, 30000);
+
+        function checkNotifications() {
+          fetch("/app/notifications/count/")
+            .then((response) => response.json())
+            .then((data) => {
+              // Get all notification badges
+              const badges = [
+                document.getElementById("desktop-notification-badge"),
+                document.getElementById("mobile-sidebar-notification-badge"),
+                document.getElementById("mobile-bottom-notification-badge"),
+              ];
+
+              // Update all badges
+              badges.forEach((badge) => {
+                if (badge) {
+                  if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = "flex";
+                  } else {
+                    badge.style.display = "none";
+                  }
+                }
+              });
+            })
+            .catch((error) => {
+              console.error("Error fetching notification count:", error);
+            });
+        }
+      });
     </script>
   </body>
 </html>
