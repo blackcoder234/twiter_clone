@@ -18,19 +18,19 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,.onrender.com').split(', ')
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(', ')
 
 # Cloudinary configuration
 cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'blackcode'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY', '523824935329674'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'T52qrmkAgoOyvpUP8wSHHVIYe-w'),
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
     secure=True
 )
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'blackcode'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '523824935329674'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'T52qrmkAgoOyvpUP8wSHHVIYe-w'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
