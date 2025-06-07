@@ -95,7 +95,7 @@ def add_tweet(request):
             tweet.user = request.user
             tweet.save()
             messages.success(request, "Tweet posted successfully!")
-            return redirect('app')
+            return redirect('app', tweet_id=tweet.id)
     else:
         form = TweetForm()
     return render(request, "app/add_tweet.html", {'form': form})
@@ -106,7 +106,7 @@ def edit_tweet(request, tweet_id):
         form = TweetForm(request.POST, request.FILES, instance=tweet)
         if form.is_valid():
             form.save()
-            return redirect('app')
+            return redirect('app', tweet_id=tweet.id)
     else:
         form = TweetForm(instance=tweet)
     return render(request, "app/edit_tweet.html", {'form': form, 'tweet': tweet})
@@ -125,7 +125,8 @@ def add_user_profile(request):
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
-            return redirect('user_profile')
+            return redirect('user_profile', user_id=request.user.id)
+
     else:
         form = UserProfileForm()
     return render(request, "app/add_user_profile.html", {'form': form})
@@ -136,7 +137,8 @@ def edit_user_profile(request, profile_id):
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('user_profile')
+            return redirect('user_profile', user_id=request.user.id)
+
     else:
         form = UserProfileForm(instance=profile)
     return render(request, "app/edit_user_profile.html", {'form': form, 'profile': profile})
