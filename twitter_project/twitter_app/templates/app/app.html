@@ -1,4 +1,6 @@
-{% extends "app/base.html" %} {% block title %}Home / TwitterClone{% endblock %}
+{% extends "app/base.html" %}
+{% load time_config %}
+{% block title %}Home / TwitterClone{% endblock %}
 {% block content %}
 <div class="flex max-w-6xl mx-auto">
   <!-- Main Feed -->
@@ -116,7 +118,7 @@
                   style="color: var(--text-secondary)"
                   title="{{ tweet.created_at }}"
                 >
-                  {{ tweet.created_at|timesince }} ago
+                  {{ tweet.created_at|configured_time }} ago
                 </span>
               </div>
 
