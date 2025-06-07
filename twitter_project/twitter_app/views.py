@@ -113,7 +113,7 @@ def add_tweet(request):
             create_tweet_notification(tweet)
             
             messages.success(request, "Tweet posted successfully!")
-            return redirect('app', tweet_id=tweet.id)
+            return redirect('app')
     else:
         form = TweetForm()
     return render(request, "app/add_tweet.html", {'form': form})
