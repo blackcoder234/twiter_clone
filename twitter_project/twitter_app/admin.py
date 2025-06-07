@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Tweet
+from .models import UserProfile, Tweet, Notification
 from django.utils.html import format_html
 
 @admin.register(UserProfile)
@@ -48,3 +48,29 @@ class TweetAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="48" height="48" style="object-fit:cover; border-radius:6px;" />', obj.photo.url)
         return "-"
     photo_thumb.short_description = 'Photo'
+    
+    
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('recipient', 'notification_type', 'sender', 'related_tweet', 'is_read', 'created_at')
+    list_filter = ('notification_type', 'is_read', 'created_at')
+    search_fields = ('recipient__username', 'sender__username', 'tweet__text')
+    date_hierarchy = 'created_at'
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at',)
+    
+    def related_tweet(self, obj):
+        if obj.tweet:
+            return format_html('<a href="/admin/twitter_app/tweet/{}/change/">{}</a>', 
+                              obj.tweet.id, 
+                              (obj.tweet.text[:40] + '...') if len(obj.tweet.text) > 40 else obj.tweet.text)
+        return "-"
+    related_tweet.short_description = 'Tweet'
+    
+    # Add colored status for read/unread
+    def is_read(self, obj):
+        if obj.is_read:
+            return format_html('<span style="color:green;">✓</span>')
+        return format_html('<span style="color:red;">✗</span>')
+    is_read.short_description = 'Read'
+    is_read.boolean = True
