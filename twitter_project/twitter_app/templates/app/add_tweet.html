@@ -1,12 +1,14 @@
 {% extends "app/base.html" %}
-{% block title %}Add Tweet / TwitterClone{% endblock %}
+{% block title %}{% if tweet %}Edit Tweet{% else %}Add Tweet{% endif %} / TwitterClone{% endblock %}
 {% block content %}
 <div class="flex max-w-6xl mx-auto">
   <div class="flex-1 max-w-2xl border-x min-h-screen" style="border-color: var(--border-color)">
     <!-- Header -->
     <div class="sticky top-0 backdrop-blur-md border-b p-4" 
          style="background-color: var(--bg-primary); border-color: var(--border-color); backdrop-filter: blur(12px); z-index: 10;">
-      <h1 class="text-xl font-bold" style="color: var(--text-primary)">Compose Tweet</h1>
+      <h1 class="text-xl font-bold" style="color: var(--text-primary)">
+        {% if tweet %}Edit Tweet{% else %}Compose Tweet{% endif %}
+      </h1>
     </div>
 
     <!-- Tweet Form -->
@@ -56,7 +58,11 @@
                        onmouseout="this.style.backgroundColor='transparent'">
                   <i class="fas fa-image"></i>
                 </label>
-                <div id="file-name" class="text-sm" style="color: var(--text-secondary);"></div>
+                <div id="file-name" class="text-sm" style="color: var(--text-secondary);">
+                  {% if tweet.photo %}
+                    {{ tweet.photo.name|slice:"9:" }}
+                  {% endif %}
+                </div>
               </div>
               
               <input type="file" 
@@ -67,9 +73,10 @@
                      onchange="updateFileName(this)">
               
               <!-- Image Preview -->
-              <div id="image-preview" class="mt-3 hidden">
+              <div id="image-preview" class="mt-3 {% if not tweet.photo %}hidden{% endif %}">
                 <div class="relative">
-                  <img id="preview-img" class="rounded-2xl max-h-80 w-auto" src="" alt="Preview">
+                  <img id="preview-img" class="rounded-2xl max-h-80 w-auto" 
+                       src="{% if tweet.photo %}{{ tweet.photo.url }}{% endif %}" alt="Preview">
                   <button type="button" 
                           onclick="removeImage()" 
                           class="absolute top-2 right-2 bg-gray-900/70 text-white p-1 rounded-full">
@@ -87,7 +94,7 @@
                       style="background-color: var(--accent-color); color: white;"
                       onmouseover="this.style.backgroundColor='var(--accent-hover)'"
                       onmouseout="this.style.backgroundColor='var(--accent-color)'">
-                Tweet
+                {% if tweet %}Update{% else %}Tweet{% endif %}
               </button>
             </div>
           </div>
