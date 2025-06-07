@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'tailwind_theme',
     'django_browser_reload',
     'widget_tweaks',
+    'cloudinary',
+    'cloudinary_storage',
     
 ]
 
@@ -135,6 +137,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = 'static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR, "static")]
+
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'blackcode',
+    'API_KEY': '523824935329674',
+    'API_SECRET': 'T52qrmkAgoOyvpUP8wSHHVIYe-w',
+}
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
