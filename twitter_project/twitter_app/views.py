@@ -154,7 +154,7 @@ def edit_tweet(request, tweet_id):
         form = TweetForm(request.POST, request.FILES, instance=tweet)
         if form.is_valid():
             form.save()
-            return redirect('app', tweet_id=tweet.id)
+            return redirect('app')
     else:
         form = TweetForm(instance=tweet)
     return render(request, "app/add_tweet.html", {'form': form, 'tweet': tweet})
